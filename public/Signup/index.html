@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8"/>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+        <title>注册</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+        <link href="../common/materialize.min.css" rel='stylesheet'/>
+        <link href="../common/css/main.css" rel="stylesheet"/>
+        <link href="./favicon.ico" rel="shortcut icon"/>
+    </head>
+    <body>
+        <div id="mview" >
+            <h4>注册</h4>
+            <br>
+            <div class="col s12">
+                <div class="input-field col s12">
+                    <input id="mail" type="text" class="validate" onkeypress="enKeyPress()">
+                    <label for="mail">用户名</label>
+                </div>
+                <form class="col s12">
+                    <div class="input-field col s12">
+                        <input id="Password" type="password" class="validate" onkeypress="enKeyPress()">
+                        <label for="Password">密码</label>
+                    </div>
+                </form>
+                <div class='row'>
+                    <div class="input-field col m6">
+                        <input id="captcha" type="text" class="validate">
+                        <label for="captcha">验证码</label>
+                    </div>
+                    <div>
+                        <img id='captchaImg'>
+                    </div>
+                </div> 
+            </div>
+            <div>
+                 <a id="SignupButton" class="waves-effect waves-light btn blue" onclick="app.requireSignup()">注册</a>
+                 <a id="ShowButton" class="waves-effect waves-light btn blue" onclick="getCaptcha()">获取验证码</a>
+            </div>
+        </div>
+        <script type="text/javascript" src="../common/jquery-3.6.0.min.js"></script>
+        <script type="text/javascript" src="../common/materialize.min.js"></script>
+        <script type="text/javascript" src="../common/js/jsencrypt.js"></script>
+        <script type="text/javascript" src="../common/AES.js"></script>
+        <script type="text/javascript" src="../common/MD5.min.js"></script>
+        <script type="text/javascript" src="../common/URL.js"></script>
+        <script type="text/javascript" src="../common/js/signup.js"></script>
+        <script>
+            function enKeyPress() {
+                if (event.keyCode == 13) {
+                    app.requireLogin();
+                }
+            }
+            function getCaptcha() {
+                $('#captchaImg').attr('src', '../api/GetCaptchaToken');
+                $('#ShowButton').attr('disabled', 'disabled');
+                setTimeout(function() {
+                    $('#ShowButton').removeAttr("disabled");
+                }, 30000)
+            }
+        </script>
+    </body>
+</html>
