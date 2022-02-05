@@ -5,7 +5,7 @@ const UserModel = require('../db').User
 let svgCaptcha = require('svg-captcha');
 
 // sessionID DEV KEY, ONLY stored by server, devices checker KEY
-// desToken  AES encrypt key, created by USER dev and the server just store it
+// AESToken  AES encrypt key, created by USER dev and the server just store it
 // AccessToken 作为统一认证标识 防护作用不大？
 
 // user should login processer
@@ -23,12 +23,12 @@ module.exports.addLogin = (sessionID, userID, sessionProfiles) => {
     container.addLogin(sessionID, userID, sessionProfiles)
 }
 
-module.exports.addDesToken = (sessionID, desToken) => {
-    container.addDesToken(sessionID, desToken)
+module.exports.addAESToken = (sessionID, AESToken) => {
+    container.addAESToken(sessionID, AESToken)
 }
 
-module.exports.getDesToken = (sessionID) => {
-    return container.getDesToken(sessionID)
+module.exports.getAESToken = (sessionID) => {
+    return container.getAESToken(sessionID)
 }
 
 module.exports.isLogin = (SessionID) => {
@@ -85,9 +85,9 @@ class PassportProcesser {
         //MUST be the first one to be decrypted!
         log.debug("Process SessionID: %s 's request! ", this.sessionID)
         this.decryptToken = EncryptTool.rsaDecrypt(config.credit).split(':')[1]
-        container.addDesToken(config.sessionID, this.decryptToken)
+        container.addAESToken(config.sessionID, this.decryptToken)
         //Get decrypt token arrary
-        let decryptTokenArrary = container.getDesToken(config.sessionID)
+        let decryptTokenArrary = container.getAESToken(config.sessionID)
         //Process the got data
         let mailArrary = EncryptTool.aesDecrypt(config.mail, decryptTokenArrary).split(':')
         let passportArrary = EncryptTool.aesDecrypt(config.passport, decryptTokenArrary).split(':')

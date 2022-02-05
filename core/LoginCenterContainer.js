@@ -3,8 +3,8 @@
 
 let LoginCenterContainer = []
 LoginCenterContainer.SessionIDContanier = {}
-//[sessionid] [desToken,accesstoken,requestdata]
-// DesToken: user msg descrypt token = AES decrypt key
+//[sessionid] [AESToken,accesstoken,requestdata]
+// AESToken: user msg descrypt token = AES decrypt key
 
 class CenterContainer {
   constructor(config = {}) {
@@ -45,17 +45,17 @@ module.exports.delLogin = (sessionID) => {
   } else throw new Error("sessionID is Null");
 };
 
-module.exports.addDesToken = (sessionID, desToken) => {
+module.exports.addAESToken = (sessionID, AESToken) => {
   // process destoken to arrary
-  let desTokenArrary = []
-  for (let i = 0; i < desToken.length; i++) {
-    desTokenArrary[i] = Number(desToken.charAt(i))
+  let AESTokenArrary = []
+  for (let i = 0; i < AESToken.length; i++) {
+    AESTokenArrary[i] = Number(AESToken.charAt(i))
   }
-  LoginCenterContainer.SessionIDContanier[sessionID] = desTokenArrary;
+  LoginCenterContainer.SessionIDContanier[sessionID] = AESTokenArrary;
 }
 
-// use sessionID to get DesToken
-module.exports.getDesToken = (sessionID) => {
+// use sessionID to get AESToken
+module.exports.getAESToken = (sessionID) => {
   if (sessionID) {
     if (LoginCenterContainer.SessionIDContanier[sessionID] !== undefined) {
       return LoginCenterContainer.SessionIDContanier[sessionID]
