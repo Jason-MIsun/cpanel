@@ -15,17 +15,18 @@ function getAccessToken(mail) {
         success: function (data) {
             console.info('Get AccessToken Successfully! Start to prase data')
             app.GET_ACCESS_TOKEN = true
-            let POST_OBJECT = JSON.parse(data);
             //确认PublicKey
             console.debug('Confirm PublicKey')
-            if (md5(POST_OBJECT.PublicKey) == app.KEY) {
+            if (md5(data.PublicKey) == app.KEY) {
                 let token = generalDESToken();
                 app.TOKEN = token
-                app.PUBLICK_KEY = POST_OBJECT.PublicKey
-                app.ACCESS_TOKEN = POST_OBJECT.AccessToken
+                app.PUBLICK_KEY = data.PublicKey
+                app.ACCESS_TOKEN = data.AccessToken
                 console.info('Confirmed PublicKey!')
+                return true
             } else {
                 alert(' CA凭证有误！拒绝登录 请联系提供者！！！');
+                return false
             }
 
         },
@@ -33,30 +34,32 @@ function getAccessToken(mail) {
         error: function (err) {
             alert('获取AccessToken失败!错误信息: %s', err)
             console.error('GetAccessToken failed! %s', err)
+            return false
         }
     });
 }
 
 function signin(mail, password) {
     if (!app.GET_ACCESS_TOKEN) {
-        console.warn('Illegal request! Refused to signin')
-        window.alert('非法操作请求!请刷新页面后重试!')
+        getAccessToken(mail)
     }
     console.info('Start to login')
     console.info('Construct postdata')
-    let md5Mail = md5(mail)  //MD5用户名
-    let md5Passport = md5(md5Mail + md5(password)) + ':' + rsaEncrypt(mail) + ':' + app.ACCESS_TOKEN; //MD5 用户名＋MD5密码
-    let md5Credit = md5(app.TOKEN.a) + ':' + app.TOKEN.a + ':' + app.VERSION_CODE //AES加密密匙
+    let md5Mail = md5(mail)                                                                 //MD5用户名
+    let md5Token = md5(app.TOKEN.a)
+    let md5Passport = md5(md5Mail + md5(password));                                         //MD5 用户名＋MD5密码
+    let md5Credit = [app.TOKEN.a, app.ACCESS_TOKEN, app.VERSION_CODE, Date.now()]//用户通信凭证
 
-    let encryptedMail = aesEncrypt(md5Mail)
-    let encryptedPassport = aesEncrypt(md5Passport)
+    let tmpPassport = md5Mail + ':' + md5Passport + ':' + md5Token + ':' + rsaEncrypt(mail)//用户登录凭证
+    // + ':' + app.ACCESS_TOKEN         //加工凭证
+
+    let encryptedPassport = aesEncrypt(tmpPassport)
     let encryptedCredit = rsaEncrypt(md5Credit)
     //start to post data
     console.info('Start to login!')
     $.post({
         url: app.URL('./api/Login'),
         data: {
-            mail: encryptedMail,
             passport: encryptedPassport,
             credit: encryptedCredit,
             _rand: Date.now()
@@ -134,8 +137,8 @@ function signup(mail, password, captcha, rand) {
 //default
 //暴露公共登录API
 app.login = function (mail, password) {
-    getAccessToken(mail)
-    signin()
+    signin(mail, password)
+
 }
 $(function () {
     //AccessToken 确认

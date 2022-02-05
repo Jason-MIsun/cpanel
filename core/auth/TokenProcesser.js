@@ -23,7 +23,7 @@ module.exports.newAccessTokenRequest = (data, sessionID, trueCallBack, falseCall
     //终端登录唯一性检查
     let requestDate = data.t
     let nowDate = Date.parse(new Date())
-    if (LoginCenter.isLogin(sessionID)) {
+    if (!LoginCenter.isLogin(sessionID)) {
         let _rand = data._rand
         let AccessToken = mTokenManager.generalNewAccessToken()
         log.info('准许获取!')

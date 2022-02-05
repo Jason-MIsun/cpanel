@@ -45,13 +45,11 @@ router.get('/GetAccessToken', function (req, res) {
 router.post('/Login', function (req, res) {
     if (!req.xhr) return;
     authenticationProcesser.newLoginRequest({
-        ip: req.socket.remoteAddress,
-        sessionID: req.sessionID,
-        mail: req.body.mail,
-        passport: req.body.passport,
-        credit: req.body.credit,
-        sessionID: req.sessionID,
-        accessToken: req.session['AccessToken'],
+        ip: req.socket.remoteAddress,           //客户端IP
+        sessionID: req.sessionID,               //客户端标识
+        passport: req.body.passport,            //用户登录凭证
+        credit: req.body.credit,                //用户通信凭证
+        accessToken: req.session['AccessToken'],//请求刷新凭证
     }, () => {
         apiResponse.send(res, 'OK! You are redirecting to user center....')
     }, (msg) => {

@@ -7,13 +7,13 @@ let mLoginContainer = new LoginContainer()
 //Passport模块
 class Passport {
     constructor(config = {}) {
-        log.trace('创建新的Passport')
         for (let v in config) {
             if (config[v] === undefined) {
-                log.warn('请求的数据非法(空对象,位于%s)!拒绝创建Passport!SessionID: %s', v, config.sessionID)
+                log.warn('请求的数据包含空对象,位于%s!拒绝创建Passport!SessionID: %s', v, config.sessionID)
                 return
             }
         }
+        log.trace('处理Passport数据中...')
         try {
             //先解密相关数据
             log.trace('解密Credit获取客户端随机私钥')
@@ -21,10 +21,10 @@ class Passport {
             this.decryptToken = EncryptTool.rsaDecrypt(config.credit).split(':')[1]
             //2、Login Center添加解密密钥
             log.trace('Container记录目标客户端私钥并储存')
-            container.addDesToken(config.sessionID, this.decryptToken)
+            container.addAESToken(config.sessionID, this.decryptToken)
             //3、获取SessionID，序列化AES解密密钥
             this.sessionID = config.sessionID
-            let decryptTokenArrary = container.getDesToken(config.sessionID)
+            let decryptTokenArrary = container.getAESToken(config.sessionID)
             //4、AES解密mail
             log.trace('解密获取用户名称')
             let mailArrary = EncryptTool.aesDecrypt(config.mail, decryptTokenArrary).split(':')
@@ -82,7 +82,8 @@ class PassportProcesser {
 module.exports.newLoginRequest = (data, trueCallBack, falseCallBack) => {
     //PASSPORT形式 md5(md5(mail)+ md5(password))
     //处理新的登录请求
-    log.info("发现新的登录请求!处理请求中......")
+    log.info("发现新的登录请求!处理请求......")
+    log.trace('创建新的Passport')
     //创建新登陆类
     let mPassport = new Passport({
         mail: data.mail,
