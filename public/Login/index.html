@@ -15,16 +15,16 @@
             <h4>登录</h4>
             <br>
             <div>
-                <span class="dark-text" id='Infoshow'></span>
+                <span class="red-text" id='Infoshow'></span>
             </div>
             <div class="input-field col s6">
-                <input id="UserID" type="text" class="validate" onkeypress="enKeyPress()">
+                <input id="UserID" type="text" class="validate" >
                 <label for="UserID">用户名</label>
             </div>
             <p></p>
             <form class="col s12">
                 <div class="input-field col s12">
-                    <input id="Password" type="password" class="validate" onkeypress="enKeyPress()">
+                    <input id="Password" type="password" class="validate" >
                     <label for="Password">密码</label>
                 </div>
             </form>
@@ -47,12 +47,5 @@
         <script type="text/javascript" src="../common/URL.js"></script>
         <script type="text/javascript" src="../common/js/EncryptTools.js"></script>
         <script type="text/javascript" src="../common/js/AuthAPI.js"></script>
-        <script>
-            function enKeyPress() {
-                if (event.keyCode == 13) {
-                    app.requireLogin();
-                }
-            }
-        </script>
     </body>
 </html>
