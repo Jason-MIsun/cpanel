@@ -73,7 +73,7 @@
 
     //响应事件函数
     function responseCallback(response, status) {
-      if (status != "success") TOOLS.pushMsgWindow("[ " + status + " ] 由于网络或权限问题,请求的网页无法成功！");
+      if (status != "success") TOOLS.pushMsgWindow("[ " + status + " ] 由于网络或权限问题,请求的网页无法成功!");
       callback && callback();
     }
 

@@ -1,6 +1,6 @@
 
 //new Token Manager
-log.info('新TokenManager创建！')
+log.info('新TokenManager创建!')
 class TokenManager {
 
     getNewToken() {

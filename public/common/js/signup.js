@@ -5,11 +5,11 @@ $(function() {
         let captcha = $("#captcha").val()
 
         if (mail == '' || password == '' || captcha == '') {
-            window.alert('请正确填写所有项目！！！')
+            window.alert('请正确填写所有项目!!!')
             return
         }
         if ($('#Password').characterCounter() < 5 || $('#Password').val().length < 5) {
-            window.alert('请确保密码不少于5个字符！')
+            window.alert('请确保密码不少于5个字符!')
             return
         }
         $.get({
@@ -29,12 +29,12 @@ $(function() {
                     app.signup(mail, password, captcha.toLowerCase(), Math.random())
                 } else {
                     $('#SignupButton').attr('disabled', 'disabled')
-                    alert(' CA凭证有误！拒绝注册 请联系提供者！！！');
+                    alert(' CA凭证有误!拒绝注册 请联系提供者!!!');
                 }
             },
             error: function() {
                 $('#SignupButton').attr('disabled', 'disabled')
-                window.alert('获取CA凭证失败！请检查网络！！！')
+                window.alert('获取CA凭证失败!请检查网络!!!')
             }
         });
     }
@@ -77,7 +77,7 @@ app.signup = function(mail, password, captcha, rand) {
             }
         },
         error: function() {
-            window.alert('获取数据失败！请检查网络！！！')
+            window.alert('获取数据失败!请检查网络!!!')
         }
     })
 }

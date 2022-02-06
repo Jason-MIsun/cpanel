@@ -25,7 +25,7 @@ function getAccessToken(mail, password) {
                 console.info('Confirmed PublicKey!')
                 signin(mail, password)
             } else {
-                alert(' CA凭证有误！拒绝登录 请联系提供者！！！');
+                alert(' CA凭证有误!拒绝登录 请联系提供者!!!');
             }
 
         },
@@ -123,7 +123,7 @@ function signup(mail, password, captcha, rand) {
             }
         },
         error: function () {
-            window.alert('获取数据失败！请检查网络！！！')
+            window.alert('获取数据失败!请检查网络!!!')
         }
     })
 }

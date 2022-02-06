@@ -105,7 +105,7 @@ class PassportProcesser {
     checkLogin() {
         log.debug('Checking user login status!')
         if (!this.init) {
-            log.warn("Current user's PASSPORTP_ROCESSER CLASS had NOT been init！REFUSE to login")
+            log.warn("Current user's PASSPORTP_ROCESSER CLASS had NOT been init!REFUSE to login")
             return false
         } //初始化检查
         return this.accessToken == this.req['AccessToken'] && //检查统一认证标识
@@ -119,7 +119,7 @@ class PassportProcesser {
         this.req.session['UserID'] = userID
         this.req.session['captcha'] = null
         this.LOGIN_STATUS = true
-        log.info('用户 [%s] 准许登录！UserID: %s, Processing...', this.mail, userID)
+        log.info('用户 [%s] 准许登录!UserID: %s, Processing...', this.mail, userID)
     }
 
     getLogin() {

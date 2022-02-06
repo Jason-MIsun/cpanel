@@ -285,7 +285,7 @@
     });
     popWinContext.load(config.template, function (response, status, xhr) {
       if (status != "success") {
-        popWinContext.html("信息框加载失败！请保持网络通畅！单击灰色区域关闭！");
+        popWinContext.html("信息框加载失败!请保持网络通畅!单击灰色区域关闭!");
         return;
       }
     });
@@ -313,7 +313,7 @@
   // $("#m-upload-file")[0].files[0] 参数 进程回调
   TOOLS.fileupload = function (file, url, args, progressCallback, successCallback, failureCallback) {
     if (typeof FormData != "function") {
-      alert("很遗憾，您的浏览器不兼容异步文件上传。请使用现代浏览器！推荐 Chrome！");
+      alert("很遗憾，您的浏览器不兼容异步文件上传。请使用现代浏览器!推荐 Chrome!");
       return null;
     }
     console.log(file);
