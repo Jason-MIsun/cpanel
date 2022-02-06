@@ -6,6 +6,7 @@ if (window.app === undefined)
 
 app.KEY = '7c37dd880182083a2e76f2a477211db7'
 app.VERSION_CODE = 20220101
+app.ENCRYPT_VERSION_CODE = 20220101001
 app.PUBLICK_KEY = null
 app.TOKEN = null
 app.ACCESS_TOKEN = null

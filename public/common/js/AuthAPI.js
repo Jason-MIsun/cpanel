@@ -43,8 +43,7 @@ function signin(mail, password) {
     let md5Mail = md5(mail)                                                                 //MD5用户名
     let md5Token = md5(app.TOKEN.a)
     let md5Passport = md5(md5Mail + md5(password));                                         //MD5 用户名＋MD5密码
-    let md5Credit = [app.TOKEN.a, app.ACCESS_TOKEN, app.VERSION_CODE, Date.now()]//用户通信凭证
-
+    let md5Credit = app.TOKEN.a + ':' + app.ACCESS_TOKEN + ':' + app.ENCRYPT_VERSION_CODE + ':' + app.VERSION_CODE + ':' + Date.now()//用户通信凭证
     let tmpPassport = md5Mail + ':' + md5Passport + ':' + md5Token + ':' + rsaEncrypt(mail)//用户登录凭证
     // + ':' + app.ACCESS_TOKEN         //加工凭证
 
@@ -68,7 +67,7 @@ function signin(mail, password) {
                 //2秒后跳转首页
                 setTimeout(function () {
                     $('#LoginButton').html(data.ResMessage);
-                    window.location.href = './';
+                    //window.location.href = './';
                 }, 2000)
             } else if (data.ResCode == 210000403) {
                 //登录出现错误并显示服务器返回信息
