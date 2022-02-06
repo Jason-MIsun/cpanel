@@ -1,5 +1,5 @@
 
-function getAccessToken(mail) {
+function getAccessToken(mail, password) {
     console.debug('Start to construct post data!')
     let s = md5(mail)
     let t = Date.parse(new Date())
@@ -14,7 +14,6 @@ function getAccessToken(mail) {
         //callback
         success: function (data) {
             console.info('Get AccessToken Successfully! Start to prase data')
-            app.GET_ACCESS_TOKEN = true
             //确认PublicKey
             console.debug('Confirm PublicKey')
             if (md5(data.PublicKey) == app.KEY) {
@@ -22,11 +21,11 @@ function getAccessToken(mail) {
                 app.TOKEN = token
                 app.PUBLICK_KEY = data.PublicKey
                 app.ACCESS_TOKEN = data.AccessToken
+                app.GET_ACCESS_TOKEN = true
                 console.info('Confirmed PublicKey!')
-                return true
+                signin(mail, password)
             } else {
                 alert(' CA凭证有误！拒绝登录 请联系提供者！！！');
-                return false
             }
 
         },
@@ -34,15 +33,11 @@ function getAccessToken(mail) {
         error: function (err) {
             alert('获取AccessToken失败!错误信息: %s', err)
             console.error('GetAccessToken failed! %s', err)
-            return false
         }
-    });
+    })
 }
 
 function signin(mail, password) {
-    if (!app.GET_ACCESS_TOKEN) {
-        getAccessToken(mail)
-    }
     console.info('Start to login')
     console.info('Construct postdata')
     let md5Mail = md5(mail)                                                                 //MD5用户名
@@ -137,9 +132,13 @@ function signup(mail, password, captcha, rand) {
 //default
 //暴露公共登录API
 app.login = function (mail, password) {
-    signin(mail, password)
-
+    if (app.GET_ACCESS_TOKEN) {
+        signin(mail, password)
+    } else {
+        getAccessToken(mail, password)
+    }
 }
+
 $(function () {
     //AccessToken 确认
     //LOGIN确认
