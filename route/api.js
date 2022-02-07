@@ -30,7 +30,6 @@ router.get('/GetAccessToken', function (req, res) {
     //if (!req.xhr) return;
     tokenProcesser.newAccessTokenRequest(req.query, req.sessionID, (Access_Token, _rand) => {
         req.session['AccessToken'] = Access_Token;
-        req.session['_rand'] = _rand;
         apiResponse.send(res, {
             AccessToken: Access_Token,
             PublicKey: server.PUBLIC_KEY,

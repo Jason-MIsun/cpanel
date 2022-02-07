@@ -49,7 +49,8 @@ module.exports.addAESToken = (sessionID, AESToken) => {
   for (let i = 0; i < AESToken.length; i++) {
     AESTokenArrary[i] = Number(AESToken.charAt(i))
   }
-  LoginCenterContainer.SessionIDContanier[sessionID] = AESTokenArrary;
+  LoginCenterContainer.SessionIDContanier[sessionID] = AESTokenArrary
+  return AESTokenArrary;
 }
 
 // use sessionID to get AESToken
@@ -78,4 +79,4 @@ setInterval(() => {
   }
 }, 1000 * 50); //50秒检索一遍
 
-module.exports = Container
+//module.exports = Container

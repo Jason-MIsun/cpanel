@@ -3,7 +3,7 @@ const EncryptTool = require('../../utils/EncryptTool')
 const LoginContainer = require('./LoginContainer')
 const UserModel = require('../../db').User
 
-let mLoginContainer = new LoginContainer()
+//let mLoginContainer = new LoginContainer()
 //Passport模块
 class Passport {
     constructor(config = {}) {
@@ -17,32 +17,28 @@ class Passport {
         try {
             //先解密相关数据
             log.trace('解密Credit获取客户端随机私钥')
-            //1、RSA解密Credit内容获取AES解密密钥
-            this.decryptToken = EncryptTool.rsaDecrypt(config.credit).split(':')[1]
+            //1、RSA解密Credit内容并获取AES解密密钥
+            let creditArrary = EncryptTool.rsaDecrypt(config.credit).split(':')
+            this.decryptToken = creditArrary[0]
             //2、Login Center添加解密密钥
             log.trace('Container记录目标客户端私钥并储存')
-            container.addAESToken(config.sessionID, this.decryptToken)
-            //3、获取SessionID，序列化AES解密密钥
+            let decryptTokenArrary = LoginContainer.addAESToken(config.sessionID, this.decryptToken)
             this.sessionID = config.sessionID
-            let decryptTokenArrary = container.getAESToken(config.sessionID)
-            //4、AES解密mail
-            log.trace('解密获取用户名称')
-            let mailArrary = EncryptTool.aesDecrypt(config.mail, decryptTokenArrary).split(':')
-            //4、AES解密passport
+            //3、AES解密passport
             log.trace('解密获取用户账密MD5')
             let passportArrary = EncryptTool.aesDecrypt(config.passport, decryptTokenArrary).split(':')
-            //5、反序列化mail数组得到真实用户名
-            this.mail = mailArrary[0]
-            this.realmail = EncryptTool.rsaDecrypt(mailArrary[1])
+            //4、获取相关关键数据
+            this.mail = passportArrary[0]
+            this.realmail = EncryptTool.rsaDecrypt(passportArrary[3])
             //5、反序列化passport数组得到Access Token
-            this.passport = passportArrary[0]
-            this.accessToken = passportArrary[1]
+            this.passport = passportArrary[1]
+            this.accessToken = creditArrary[1]
             //6、打上已经初始化的标签
             this.init = true
             this.LOGIN_STATUS = false
             //日志记录
-            log.info('[PassportProcesser] ' + '用户 %s(%s) 尝试登陆! Credit(MD5): %s, DcryptToken: %s. 检查凭证中......',
-                this.realmail, this.mail, this.passport, this.decryptToken)
+            log.info('[Passport] ' + '用户 %s(%s) 尝试登陆! Credit(MD5): %s, DcryptToken: %s. 检查凭证',
+                this.realmail, this.mail, this.passport, this.decryptToken);
         } catch (err) {
             log.error('获取相关数据失败!请检查数据是否完整!ErrorMsg: %s', err)
             return
@@ -53,7 +49,6 @@ class Passport {
 //PassportProcesser处理器
 class PassportProcesser {
     constructor(passport) {
-        log.fatal(passport)
         if (EncryptTool.isEmptyObject(passport)) {
             log.warn('Passport为空对象!拒绝处理!')
             return
@@ -86,16 +81,14 @@ module.exports.newLoginRequest = (data, trueCallBack, falseCallBack) => {
     log.trace('创建新的Passport')
     //创建新登陆类
     let mPassport = new Passport({
-        mail: data.mail,
         passport: data.passport,
         credit: data.credit,
         sessionID: data.sessionID,
-        accessToken: data.accessToken,
+        //accessToken: data.accessToken,
     })
     //检查登陆状态
     let mPassportProcesser = new PassportProcesser(mPassport)
     if (EncryptTool.isEmptyObject(mPassportProcesser)) {
-        log.warn("PassportProcesser为空对象!拒绝处理!")
         //TODO:对于非空对象的处理非法请求的处理
         return falseCallBack && falseCallBack('拒绝登录，非法请求!')
     }

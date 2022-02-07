@@ -45,7 +45,6 @@ function signin(mail, password) {
     let md5Passport = md5(md5Mail + md5(password));                                         //MD5 用户名＋MD5密码
     let md5Credit = app.TOKEN.a + ':' + app.ACCESS_TOKEN + ':' + app.ENCRYPT_VERSION_CODE + ':' + app.VERSION_CODE + ':' + Date.now()//用户通信凭证
     let tmpPassport = md5Mail + ':' + md5Passport + ':' + md5Token + ':' + rsaEncrypt(mail)//用户登录凭证
-    // + ':' + app.ACCESS_TOKEN         //加工凭证
 
     let encryptedPassport = aesEncrypt(tmpPassport)
     let encryptedCredit = rsaEncrypt(md5Credit)
@@ -56,7 +55,6 @@ function signin(mail, password) {
         data: {
             passport: encryptedPassport,
             credit: encryptedCredit,
-            _rand: Date.now()
         },
         //请求成功回调
         success: function (data) {
@@ -131,6 +129,7 @@ function signup(mail, password, captcha, rand) {
 //default
 //暴露公共登录API
 app.login = function (mail, password) {
+    $('#LoginButton').html('正在验证...').attr('disabled', 'disabled');
     if (app.GET_ACCESS_TOKEN) {
         signin(mail, password)
     } else {
@@ -143,11 +142,8 @@ $(function () {
     //LOGIN确认
     //暴露API
     app.requireLogin = function () {
-        let button = $('#LoginButton');
-        button.html('正在验证...').attr('disabled', 'disabled');
         if (!$('UserID').val() && !$('#Password').val()) {
-            window.alert('请输入正确的账密!')
-            button.html('登录').removeAttr('disabled')
+            $('#Infoshow').html('请输入正确的账密!')
             return
         }
         app.login($('#UserID').val(), $('#Password').val())

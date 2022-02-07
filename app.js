@@ -38,14 +38,12 @@ app.use(
     cookie: {
       maxAge: server.session_max_age * 1000 * 60
     },
-    store: new sessionStore({
-      ttl: 300
-    }),
-    resave: false,
+    store: new sessionStore({ ttl: 300 }),
+    resave: true,
     saveUninitialized: false
   })
 );
-log.info('Cookie MaxAge: %s', server.session_max_age*1000*60)
+log.info('Cookie MaxAge: %s', server.session_max_age * 1000 * 60)
 log.info('禁用Expresss框架Header')
 app.disable('x-powered-by');
 
@@ -109,7 +107,7 @@ app.use(function (err, req, res, next) {
 app.use(function (req, res) {
   // 重定向到 404 页面
   //res.status(404).send("404 Not Found")
-  res.redirect("/Error/404");
+  res.status(404).redirect("/Error/404");
   res.end();
 });
 
