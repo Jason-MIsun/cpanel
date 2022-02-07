@@ -8,7 +8,7 @@ server.USE_GZIP = true
 server.HTTPS = true
 server.session_max_age = 240
 server.REQUEST_EXPIRE_TIME = 1000
-server.ACCESS_TOKEN_LENGTH = 64
+server.ACCESS_TOKEN_LENGTH = 12
 server.ACCESS_TOKEN_REQUEST_EXPIRE_TIME = 1000
 
 // Session Key RSA 证书及其密匙
