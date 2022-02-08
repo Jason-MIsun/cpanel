@@ -47,6 +47,12 @@ log.info('Cookie MaxAge: %s', server.session_max_age * 1000 * 60)
 log.info('禁用Expresss框架Header')
 app.disable('x-powered-by');
 
+// GZIP 压缩必须放到外部请求处理程序之后 否则不会被压缩识别
+if (server.USE_GZIP) {
+  log.info('初始化压缩功能GZIP')
+  app.use(compression())
+}
+
 log.info("初始化Blocker")
 // 路由记录器
 app.use(function (req, res, next) {
@@ -89,12 +95,7 @@ autoLoadRoute('./route/')
 app.get('/', function (req, res) {
   res.status(200).send('This is root website DIR')
 })
-
-// GZIP 压缩必须放到外部请求处理程序之后 否则不会被压缩识别
-if (server.USE_GZIP) {
-  log.info('初始化压缩功能GZIP')
-  app.use(compression())
-}
+//TODO: 劫持路由 由匹配实现虚拟路由功能 相关功能参考 WORDPRESS
 
 //HTTP服务器错误对外处理
 app.use(function (err, req, res, next) {
