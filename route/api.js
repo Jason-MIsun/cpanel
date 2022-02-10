@@ -29,7 +29,7 @@ router.get('/GetCaptchaToken', function (req, res) {
 router.get('/GetAccessToken', function (req, res) {
     //if (!req.xhr) return;
     tokenProcesser.newAccessTokenRequest(req.query, req.sessionID, (Access_Token, _rand) => {
-        req.session['AccessToken'] = Access_Token;
+        req.session.accesstoken = Access_Token;
         apiResponse.send(res, {
             AccessToken: Access_Token,
             PublicKey: server.PUBLIC_KEY,
@@ -48,7 +48,7 @@ router.post('/Login', function (req, res) {
         sessionID: req.sessionID,               //客户端标识
         passport: req.body.passport,            //用户登录凭证
         credit: req.body.credit,                //用户通信凭证
-        accessToken: req.session['AccessToken'],//请求刷新凭证
+        //accessToken: req.session.accesstoken,   //请求刷新凭证
     }, () => {
         apiResponse.send(res, 'OK! You are redirecting to user center....')
     }, (msg) => {
