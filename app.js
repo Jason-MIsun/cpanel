@@ -33,7 +33,7 @@ app.use(bodyParser.json());
 log.info("初始化Session配置")
 app.use(
   session({
-    secret: UUID.v4(),
+    secret: 'cpanel-blog-ID',
     name: "SESSION_ID",
     cookie: {
       maxAge: server.session_max_age * 1000 * 60
@@ -53,6 +53,10 @@ if (server.USE_GZIP) {
   app.use(compression())
 }
 
+log.info('初始化静态文件配置')
+app.use("/public", express.static("./public"));
+app.use("/common", express.static("./public/common"));
+
 log.info("初始化Blocker")
 // 路由记录器
 app.use(function (req, res, next) {
@@ -63,10 +67,6 @@ app.use(function (req, res, next) {
     req.ip, req.method, req.url, RequestToken)
   next()
 })
-
-log.info('初始化静态文件配置')
-app.use("/public", express.static("./public"));
-app.use("/common", express.static("./public/common"));
 
 //自动加载路由模块
 function autoLoadRoute(parentRoutePath, childRoutePathName) {
