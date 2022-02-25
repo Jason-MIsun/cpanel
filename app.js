@@ -49,7 +49,7 @@ app.disable('x-powered-by');
 
 // GZIP 压缩必须放到外部请求处理程序之后 否则不会被压缩识别
 if (server.USE_GZIP) {
-  log.info('初始化压缩功能GZIP')
+  log.info('启用压缩功能 初始化压缩插件: GZIP')
   app.use(compression())
 }
 
